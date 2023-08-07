@@ -1,0 +1,23 @@
+#!/bin/bash
+
+CURRENTDIR=$(pwd)
+SCRIPTPATH=$(dirname "$0")
+
+if [ "$SCRIPTPATH" = '.' ]
+then
+    SCRIPTPATH="$CURRENTDIR"
+else
+    SCRIPTPATH="$CURRENTDIR/$SCRIPTPATH"
+fi
+
+case "$(uname -s)" in
+    Linux*)  windows=0;mac=0;;
+    Darwin*) windows=0;mac=1;;
+    CYGWIN*) windows=1;mac=0;;
+    MINGW*)  windows=1;mac=0;;
+    *)       windows=0;mac=0
+esac
+
+if [ -e $SCRIPTPATH/vendor/bin/php-cs-fixer ]; then
+    $SCRIPTPATH/vendor/bin/php-cs-fixer fix -vv $SCRIPTPATH/ $@
+fi
